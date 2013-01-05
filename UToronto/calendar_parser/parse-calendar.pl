@@ -150,7 +150,7 @@ sub main {
 	#parse_calendar;
 	#save_courses( "courses.object" );
 	%courses = %{ load_courses( "courses.object" ) };
-	#print_courses;
+	print_courses;
 }
 
 main;
