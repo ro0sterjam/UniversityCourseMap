@@ -150,45 +150,7 @@ sub main {
 	#parse_calendar;
 	#save_courses( "courses.object" );
 	%courses = %{ load_courses( "courses.object" ) };
-	#print_courses;
+	print_courses;
 }
 
 main;
-
-sub temp_code {
-	my $creg = '[A-Z]{3}[0-9]{3}[A-Z][0-9]';
-	my $creg2 = '([A-Z]{3})?[0-9]{3}[A-Z][0-9]?';
-	my $grade = '\((minimum)?(grade)?(of)?[0-9][0-9]%(minimum)?\)';
-	my $tba = '[Tt][Bb][Aa]';
-	my $sep = '([;,\/\(\)+]|or|and){0,3}';
-	my $none = '[Nn]one\.?';
-	my $fce = "([Mm]inimum)?[0-9]+(\.[0-9])?[Ff][Cc][Ee]'?`?s?([Ii]ncluding)?";
-	my $csc = 'CGPA3.0\/[Ee]nrolmentinaCSC[Ss]ubjectPOSt\.?';
-	my $year = '(4th|3rd|2nd|1st)[Yy]ear[Ss]tatus';
-	my $adv = '[Aa]dvanced[Ss]tatus';
-	my $perm = '(([Pp]ermission(of|or)(the)?[Ii]nstructor)|([Pp]ermissionof(the)?[Dd]epartment)|(ApprovalofInstructorandProgramDirector)|(WrittenapprovalofProgramDirector)|(ApprovaloftheUndergraduateCoordinatorisrequired))\.?';
-	my $prev = "([Pp]reviously$creg2)";
-	my $equ = "(or)?(it'?s)?(their)?(an)?equivalent";
-
-	my $good;
-	my $neutral;
-	my $evil;
-	for my $course ( values %courses ) {
-		my $prerequisite = $course->prerequisite;
-		my $condensed = $prerequisite;
-		$condensed =~ s/\s+//g;
-		if ( $condensed =~ m/^$sep($creg$sep)+\.?$/ or not $condensed or $condensed =~ m/^$none$/ ) {
-			$good++;
-		} elsif ( $condensed =~ m/^$sep(($creg2|$perm|$tba|$fce|$csc|$year|$grade|$adv|$prev|$equ)$sep)+\.?$/ ) {
-			$neutral++;
-		} else {
-			$evil++;
-			print ":" x 80 . "\n";
-			print $prerequisite . "\n";
-		}
-	}
-
-	print 'Good : ' . $good . "\n";
-	print 'Neut : ' . $neutral . "\n";
-	print 'Evil : ' . $evil . "\n";
-}
